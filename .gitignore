@@ -1,0 +1,18 @@
+# Secrets - NEVER commit real values. Present from the very first commit.
+.env
+.env.*
+!.env.example
+
+# Runtime decision logs
+logs/
+*.log
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# OS / editor cruft
+Thumbs.db
+.DS_Store
+desktop.ini

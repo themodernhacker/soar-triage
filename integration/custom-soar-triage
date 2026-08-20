@@ -1,0 +1,24 @@
+#!/bin/sh
+# Wazuh custom integration launcher for soar-triage.
+#
+# Wazuh's integrator daemon invokes this automatically when an alert matches the
+# <integration> block in ossec.conf, calling it as:
+#
+#     custom-soar-triage <alert_file> <api_key> <hook_url>
+#
+# Only <alert_file> (the first argument, a JSON file with the alert) is used.
+# API credentials are NOT taken from the command line; they come from .env /
+# the environment, so nothing secret ever appears in ossec.conf or a process list.
+#
+# See INTEGRATION.md for the exact install and config steps.
+
+DIR="$(cd "$(dirname "$0")" && pwd -P)"
+
+# Prefer the Wazuh-bundled Python so this behaves identically in any manager
+# container; fall back to a system python3 for local runs.
+PYBIN="${DIR%/integrations}/framework/python/bin/python3"
+if [ ! -x "$PYBIN" ]; then
+    PYBIN="$(command -v python3 2>/dev/null || echo python3)"
+fi
+
+exec "$PYBIN" "${DIR}/soar_triage/main.py" "$@"
