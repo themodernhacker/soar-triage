@@ -18,12 +18,36 @@ Standard library only.
 from __future__ import annotations
 
 import json
+import os
 import ssl
 import urllib.error
 import urllib.request
 from typing import Optional
 
 GITHUB_API = "https://api.github.com"
+
+# System CA bundles, in preference order. The Wazuh-bundled Python's OpenSSL does
+# not always find the container trust store on its own, so load one explicitly.
+_CA_BUNDLES = (
+    "/etc/ssl/certs/ca-certificates.crt",
+    "/etc/pki/tls/certs/ca-bundle.crt",
+    "/etc/ssl/cert.pem",
+)
+
+
+def _ssl_context() -> ssl.SSLContext:
+    """A verifying TLS context that also loads a known system CA bundle if present.
+    Falls back to the platform default where that already works, so certificate
+    verification stays on everywhere."""
+    ctx = ssl.create_default_context()
+    for ca in _CA_BUNDLES:
+        if os.path.isfile(ca):
+            try:
+                ctx.load_verify_locations(ca)
+                break
+            except (ssl.SSLError, OSError):
+                continue
+    return ctx
 
 _PRIORITY_LABEL = {"high": "priority:high", "medium": "priority:medium", "low": "priority:low"}
 
@@ -108,7 +132,7 @@ def create_issue(title: str, body: str, repo: Optional[str], token: Optional[str
         "User-Agent": "soar-triage",
         "Content-Type": "application/json",
     })
-    ctx = ssl.create_default_context()
+    ctx = _ssl_context()
     try:
         with urllib.request.urlopen(req, timeout=timeout, context=ctx) as resp:
             payload = json.loads(resp.read().decode("utf-8"))

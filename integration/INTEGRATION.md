@@ -114,6 +114,20 @@ python src/main.py path/to/alert.json
 A sample alert to try is in [`../tests/`](../tests/) fixtures / the honeypot lab's
 indexer export.
 
+## Troubleshooting
+
+- **Alert + triage steps work but the ticket step logs a GitHub network error.**
+  The Wazuh-bundled Python could not verify TLS (`unable to get local issuer
+  certificate`). The code loads a system CA bundle automatically (`_ssl_context`
+  in `src/ticket.py` and `src/enrich.py`); if your image keeps its trust store in
+  an unusual place, add that path to `_CA_BUNDLES`.
+- **`ossec.log` shows `has write permissions`** and the script never runs: the
+  integration is writable by the `wazuh` user. Re-run the step 3 chown to
+  `root:wazuh`.
+- **Nothing fires at all:** confirm `wazuh-integratord` stayed up
+  (`grep -i integrator /var/ossec/logs/ossec.log`); it exits cleanly if no
+  `<integration>` is configured.
+
 ## Removing it
 
 Delete the `<integration>` block from `ossec.conf`, restart the manager, and

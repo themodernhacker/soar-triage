@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import ipaddress
 import json
+import os
 import ssl
 import urllib.error
 import urllib.parse
@@ -29,6 +30,30 @@ from dataclasses import dataclass, field, asdict
 from typing import Optional
 
 ABUSEIPDB_URL = "https://api.abuseipdb.com/api/v2/check"
+
+# System CA bundles, in preference order. The Wazuh-bundled Python's OpenSSL does
+# not always find the container trust store on its own (it fails verification with
+# "unable to get local issuer certificate"), so we load one of these explicitly.
+_CA_BUNDLES = (
+    "/etc/ssl/certs/ca-certificates.crt",
+    "/etc/pki/tls/certs/ca-bundle.crt",
+    "/etc/ssl/cert.pem",
+)
+
+
+def _ssl_context() -> ssl.SSLContext:
+    """A verifying TLS context that also loads a known system CA bundle if present.
+    Falls back to the platform default on hosts where that already works (e.g. the
+    Windows dev box), so certificate verification stays on everywhere."""
+    ctx = ssl.create_default_context()
+    for ca in _CA_BUNDLES:
+        if os.path.isfile(ca):
+            try:
+                ctx.load_verify_locations(ca)
+                break
+            except (ssl.SSLError, OSError):
+                continue
+    return ctx
 
 # RFC 5737 documentation ranges (TEST-NET-1/2/3). ipaddress treats these as
 # global, so we check them explicitly rather than relying on is_private.
@@ -101,7 +126,7 @@ def lookup_abuseipdb(ip: str, api_key: Optional[str], timeout: float = 6.0) -> R
 
     url = f"{ABUSEIPDB_URL}?ipAddress={urllib.parse.quote(ip)}&maxAgeInDays=90"
     req = urllib.request.Request(url, headers={"Key": api_key, "Accept": "application/json"})
-    ctx = ssl.create_default_context()
+    ctx = _ssl_context()
     try:
         with urllib.request.urlopen(req, timeout=timeout, context=ctx) as resp:
             payload = json.loads(resp.read().decode("utf-8")).get("data", {})
