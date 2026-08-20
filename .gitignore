@@ -6,6 +6,8 @@
 # Runtime decision logs
 logs/
 *.log
+# ...but committed evidence artifacts under evidence/ are intentional
+!evidence/*.log
 
 # Python
 __pycache__/
