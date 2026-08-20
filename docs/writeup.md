@@ -37,16 +37,20 @@ escalation, rule 100151), so it is a like-for-like comparison.
 | Path | Time | How measured |
 |------|------|--------------|
 | Manual, by hand | **~2 min 50 s (170 s)** | wall clock, dashboard to a written ticket, one self-timed run |
-| Automated, end to end | **~0.7 s** (measured: alert received to Issue #1 filed) | integration trace timestamp to the filed Issue; the GitHub API round-trip dominates |
+| Automated, end to end | **~0.7 s typical** (0.55 to 1.1 s across the 11 Issues filed in one run) | integration trace timestamp to the filed Issue; the GitHub API round-trip dominates |
 | Automated, compute only | **~0.2 ms median** (50 runs) | enrich + triage + log, measured locally; excludes the network round-trips |
 
 Both figures are real and measured. The enrichment classification, the decision,
 and the reasoning log take a fraction of a millisecond; the end-to-end automated
 time is dominated entirely by the network round-trips (the GitHub Issue API call,
 plus the AbuseIPDB lookup which is skipped in this lab, see below), not by the
-logic. On this single run that is roughly **170 s by hand versus 0.7 s automated,
-about a 240x reduction**, almost all of it the difference between a human looking
-things up and typing a ticket, and a program that does not have to.
+logic. That is roughly **170 s by hand versus about 0.7 s automated** (0.55 to
+1.1 s measured across the run), a reduction of well over 100x, almost all of it the
+difference between a human looking things up and typing a ticket, and a program
+that does not have to. The full trace of that run, every alert-received to
+ticket-filed pair, is committed as
+[`../evidence/live-run-trace.log`](../evidence/live-run-trace.log) so the number is
+verifiable from a file, not just a screenshot.
 
 ## Honest caveats
 

