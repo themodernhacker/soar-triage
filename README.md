@@ -63,6 +63,20 @@ workflow, one lab.
 | level >= 10 otherwise | `auto-triaged`, needs analyst review | yes |
 | anything lower | `logged` | no |
 
+## Proof it runs (live)
+
+Fired against the honeypot lab, `wazuh-integratord` auto-filed a real GitHub Issue
+for every level 10+ alert, in about **0.7 s each** (versus ~2 min 50 s to do the
+same triage by hand). The disposition shows right in the labels: level-12
+correlation alerts land `auto-confirmed / priority:high`, level-10 alerts
+`auto-triaged / priority:medium`. These are live, not mocked, open the
+**[Issues tab](https://github.com/themodernhacker/soar-triage/issues)** and read them.
+
+![Auto-filed GitHub Issues from one attack run](evidence/screenshots/03-github-issues-list.png)
+
+Full walkthrough, all evidence, and the manual-vs-automated timing:
+[`docs/writeup.md`](docs/writeup.md).
+
 ## Wiring it up
 
 It hooks into Wazuh's native `wazuh-integratord` (event-driven, not polling), the

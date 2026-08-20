@@ -36,15 +36,17 @@ escalation, rule 100151), so it is a like-for-like comparison.
 
 | Path | Time | How measured |
 |------|------|--------------|
-| Manual, by hand | **[ fill in: your single self-timed run ]** | wall clock, dashboard to written ticket |
-| Automated, end to end | **[ fill in: alert fires to Issue filed, from your live run ]** | integration log timestamp to GitHub Issue timestamp |
+| Manual, by hand | **~2 min 50 s (170 s)** | wall clock, dashboard to a written ticket, one self-timed run |
+| Automated, end to end | **~0.7 s** (measured: alert received to Issue #1 filed) | integration trace timestamp to the filed Issue; the GitHub API round-trip dominates |
 | Automated, compute only | **~0.2 ms median** (50 runs) | enrich + triage + log, measured locally; excludes the network round-trips |
 
-The compute figure is real and measured (the enrichment classification, the
-decision, and the reasoning log take a fraction of a millisecond). The end-to-end
-automated time is dominated entirely by two network round-trips, the AbuseIPDB
-lookup (skipped in this lab, see below) and the GitHub Issue API call, not by the
-logic. Fill the two bracketed cells from your own runs; do not estimate them.
+Both figures are real and measured. The enrichment classification, the decision,
+and the reasoning log take a fraction of a millisecond; the end-to-end automated
+time is dominated entirely by the network round-trips (the GitHub Issue API call,
+plus the AbuseIPDB lookup which is skipped in this lab, see below), not by the
+logic. On this single run that is roughly **170 s by hand versus 0.7 s automated,
+about a 240x reduction**, almost all of it the difference between a human looking
+things up and typing a ticket, and a program that does not have to.
 
 ## Honest caveats
 
@@ -67,12 +69,30 @@ These matter more than an inflated number:
 
 ## Evidence
 
-From the live run (see [`../evidence/screenshots/`](../evidence/screenshots/)):
+From the live run (all under [`../evidence/screenshots/`](../evidence/screenshots/)):
 
-1. The Wazuh alert firing in the dashboard.
-2. The integration's console/log trace showing enrich -> triage -> ticket in
-   sequence, plus the decision log with its reasoning.
-3. The resulting GitHub Issue in this repo's Issues tab.
+**The alert that triggered the pipeline** (Wazuh, rule 100151, level 12):
+
+![Wazuh alert, rule 100151 at level 12](../evidence/screenshots/01-wazuh-alert.png)
+
+**The pipeline running**, enrich -> triage -> ticket filed, one block per alert:
+
+![Integration trace: enrich, triage, ticket filed](../evidence/screenshots/02-integration-trace.png)
+
+**Real auto-filed tickets**, one per level 10+ alert, with the disposition visible
+right in the labels (`auto-confirmed` / `priority:high` for the level-12
+correlation alerts, `auto-triaged` / `priority:medium` for the level-10 ones):
+
+![Auto-filed GitHub Issues from one attack run](../evidence/screenshots/03-github-issues-list.png)
+
+**One ticket in full**, formatted like an incident ticket, carrying the reasoning
+the automation used:
+
+![A filed GitHub Issue in full](../evidence/screenshots/04-github-issue-detail.png)
+
+**The decision log**, every disposition recorded with the facts it rested on:
+
+![Decision log with per-decision reasoning](../evidence/screenshots/05-decision-log.png)
 
 ## What this proves
 
