@@ -38,10 +38,17 @@ traffic is RFC 1918, so it is classified locally and the lookup is skipped).
 
 ## 3. Fix ownership and permissions
 
+Own the files **`root:wazuh`, not `wazuh:wazuh`**. `wazuh-integratord` runs as the
+`wazuh` user and refuses to execute an integration that the running user can write
+to (it errors with "has write permissions"). Root-owned, group `wazuh`, mode 750
+lets `wazuh` execute it but not modify it, which is exactly how Wazuh's own bundled
+integrations (slack, virustotal, ...) are shipped.
+
 ```bash
 docker exec single-node-wazuh.manager-1 sh -c '
-  chown -R wazuh:wazuh /var/ossec/integrations/soar_triage /var/ossec/integrations/custom-soar-triage /var/ossec/integrations/.env &&
+  chown -R root:wazuh /var/ossec/integrations/soar_triage /var/ossec/integrations/custom-soar-triage /var/ossec/integrations/.env &&
   chmod 750 /var/ossec/integrations/custom-soar-triage &&
+  chmod -R 750 /var/ossec/integrations/soar_triage &&
   chmod 640 /var/ossec/integrations/.env'
 ```
 
@@ -83,12 +90,17 @@ python attack\run_session.py 127.0.0.1 2222
 
 ## 6. Watch it fire
 
+With `SOAR_TRIAGE_TRACE` and `SOAR_TRIAGE_LOG` set in `.env` (see `.env.example`):
+
 ```bash
 # the pipeline's own trace (enrich -> triage -> ticket)
-docker exec single-node-wazuh.manager-1 sh -c 'tail -f /var/ossec/logs/integrations.log'
+docker exec single-node-wazuh.manager-1 sh -c 'tail -20 /var/ossec/logs/soar-triage.log'
 
-# and the decision log with full reasoning
-docker exec single-node-wazuh.manager-1 sh -c 'cat /var/ossec/integrations/soar_triage/../logs/decisions.log'
+# the decision log with full reasoning (one JSON record per decision)
+docker exec single-node-wazuh.manager-1 sh -c 'tail -5 /var/ossec/logs/soar-triage-decisions.log'
+
+# integratord's own view (execution errors show up here)
+docker exec single-node-wazuh.manager-1 sh -c 'grep -i integrat /var/ossec/logs/ossec.log | tail -5'
 ```
 
 The GitHub Issue it files appears in this repo's **Issues** tab.

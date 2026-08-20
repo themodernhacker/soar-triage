@@ -34,10 +34,14 @@ ABUSE_SCORE_THRESHOLD = 50  # AbuseIPDB confidence score (0-100) that counts as 
 # as "already correlated across multiple lab rules".
 CORRELATION_RULE_IDS = {"100104", "100105", "100110", "100151"}
 
-DEFAULT_LOG = os.environ.get(
-    "SOAR_TRIAGE_LOG",
-    os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "logs", "decisions.log")),
-)
+def default_log_path() -> str:
+    """Resolved at call time (not import time) so a SOAR_TRIAGE_LOG loaded from a
+    .env after import is still honoured, e.g. pointing the log at a writable path
+    inside the Wazuh manager container."""
+    return os.environ.get(
+        "SOAR_TRIAGE_LOG",
+        os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "logs", "decisions.log")),
+    )
 
 
 def _rule(alert: dict) -> dict:
@@ -101,9 +105,11 @@ def decide(alert: dict, enrichment: dict) -> dict:
     }
 
 
-def log_decision(decision: dict, alert: dict, enrichment: dict, path: str = DEFAULT_LOG) -> str:
+def log_decision(decision: dict, alert: dict, enrichment: dict, path: str = None) -> str:
     """Append one structured, timestamped record of the decision and the facts it
     rested on. Returns the path written. Best-effort: never raises into the pipeline."""
+    if path is None:
+        path = default_log_path()
     record = {
         "ts": datetime.now(timezone.utc).isoformat(),
         "alert_id": alert.get("id") or (alert.get("rule") or {}).get("id"),

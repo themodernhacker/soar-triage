@@ -23,6 +23,7 @@ from __future__ import annotations
 import json
 import os
 import sys
+from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -53,7 +54,18 @@ def load_env(path: str = None) -> None:
 
 
 def _log(msg: str) -> None:
-    print(f"[soar-triage] {msg}", flush=True)
+    """Trace one pipeline step. Prints to stdout (for manual runs) and, when
+    SOAR_TRIAGE_TRACE is set, appends to that file too. Wazuh's integratord sends
+    the script's stdout to /dev/null, so the file is how a live run is captured."""
+    line = f"[soar-triage] {msg}"
+    print(line, flush=True)
+    trace = os.environ.get("SOAR_TRIAGE_TRACE")
+    if trace:
+        try:
+            with open(trace, "a", encoding="utf-8") as fh:
+                fh.write(f"{datetime.now(timezone.utc).isoformat()} {line}\n")
+        except OSError:
+            pass
 
 
 def run(alert_path: str) -> dict:
